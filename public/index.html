@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TaskFlow | Smart Task Management</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <span>TaskFlow</span>
+        </div>
+
+        <nav>
+            <a href="#" class="nav-link active">
+                <i class="fa-solid fa-chart-pie"></i>
+                Dashboard
+            </a>
+
+            <a href="#tasks" class="nav-link">
+                <i class="fa-solid fa-list-check"></i>
+                My Tasks
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="profile">
+                <div class="avatar">A</div>
+
+                <div>
+                    <strong>Aparna Kurve</strong>
+                    <small>Student</small>
+                </div>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div class="mobile-logo">
+                <strong>TaskFlow</strong>
+            </div>
+
+            <div class="top-actions">
+
+                <button class="icon-btn">
+                    <i class="fa-regular fa-bell"></i>
+                </button>
+
+                <div class="top-avatar">
+                    A
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- DASHBOARD -->
+        <section class="dashboard">
+
+            <!-- WELCOME -->
+            <div class="welcome">
+
+                <div>
+
+                    <p class="date" id="currentDate"></p>
+
+                    <h1>
+                        Good morning, Aparna 👋
+                    </h1>
+
+                    <p class="subtitle">
+                        Stay organized and get things done.
+                    </p>
+
+                </div>
+
+                <button class="primary-btn" onclick="openModal()">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    New Task
+
+                </button>
+
+            </div>
+
+
+            <!-- STATISTICS -->
+            <div class="stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon purple">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+
+                    <div>
+                        <p>Total Tasks</p>
+                        <h2 id="totalTasks">0</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon orange">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+
+                    <div>
+                        <p>To Do</p>
+                        <h2 id="todoTasks">0</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon blue">
+                        <i class="fa-solid fa-spinner"></i>
+                    </div>
+
+                    <div>
+                        <p>In Progress</p>
+                        <h2 id="progressTasks">0</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon green">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+
+                    <div>
+                        <p>Completed</p>
+                        <h2 id="completedTasks">0</h2>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TASK SECTION -->
+            <section class="task-section" id="tasks">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>My Tasks</h2>
+
+                        <p>
+                            Manage and track your work
+                        </p>
+
+                    </div>
+
+
+                    <div class="controls">
+
+                        <div class="search-box">
+
+                            <i class="fa-solid fa-search"></i>
+
+                            <input
+                                type="text"
+                                id="searchInput"
+                                placeholder="Search tasks..."
+                                oninput="filterTasks()">
+
+                        </div>
+
+
+                        <select
+                            id="statusFilter"
+                            onchange="filterTasks()">
+
+                            <option value="All">
+                                All Tasks
+                            </option>
+
+                            <option value="To Do">
+                                To Do
+                            </option>
+
+                            <option value="In Progress">
+                                In Progress
+                            </option>
+
+                            <option value="Completed">
+                                Completed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TASK CARDS -->
+                <div
+                    id="taskContainer"
+                    class="task-grid">
+
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+
+                        <p>
+                            Loading tasks...
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <!-- CREATE / EDIT MODAL -->
+    <div
+        class="modal-overlay"
+        id="taskModal">
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h2 id="modalTitle">
+                        Create New Task
+                    </h2>
+
+                    <p>
+                        Add details about your task
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="close-btn"
+                    onclick="closeModal()">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+            <form id="taskForm">
+
+                <input
+                    type="hidden"
+                    id="taskId">
+
+
+                <label>
+                    Task Title
+                </label>
+
+                <input
+                    type="text"
+                    id="title"
+                    placeholder="e.g. Complete project documentation"
+                    required>
+
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    id="description"
+                    placeholder="Add some details..."
+                    rows="4"></textarea>
+
+
+                <div class="form-row">
+
+                    <div>
+
+                        <label>
+                            Priority
+                        </label>
+
+                        <select id="priority">
+
+                            <option value="Low">
+                                Low
+                            </option>
+
+                            <option
+                                value="Medium"
+                                selected>
+                                Medium
+                            </option>
+
+                            <option value="High">
+                                High
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label>
+                            Status
+                        </label>
+
+                        <select id="status">
+
+                            <option value="To Do">
+                                To Do
+                            </option>
+
+                            <option value="In Progress">
+                                In Progress
+                            </option>
+
+                            <option value="Completed">
+                                Completed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <label>
+                    Due Date
+                </label>
+
+                <input
+                    type="date"
+                    id="dueDate">
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        onclick="closeModal()">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="primary-btn">
+
+                        <i class="fa-solid fa-check"></i>
+
+                        <span id="submitText">
+                            Create Task
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOAST -->
+    <div id="toast" class="toast">
+
+        <i class="fa-solid fa-circle-check"></i>
+
+        <span id="toastMessage">
+            Success
+        </span>
+
+    </div>
+
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
